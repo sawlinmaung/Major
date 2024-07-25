@@ -1,0 +1,15 @@
+data.txt
+__pycache__/
+*.py[cod]
+venv/
+env/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.class
+*.o
+*.so
+.ipynb_checkpoints/
+.vscode/
+.idea/
