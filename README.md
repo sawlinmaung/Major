@@ -1,7 +1,9 @@
-
 # Major Bot
 
 Auto Claim for Major Telegram Bot
+
+# Watch Video Tutorial
+[Click Here](https://youtu.be/6ZPwzPVNArU)
 
 # Features
 
