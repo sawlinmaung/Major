@@ -3,9 +3,6 @@
 
 Auto Claim for Major Telegram Bot
 
-# g
-<a href="https://ibb.co/HVxHj7k"><img src="https://www.youtube.com/embed/6ZPwzPVNArU?si=m3UJFPALcARhVUHL" alt="In-Shot-20240726-021422708" border="0"></a>
-
 # Features
 
 - [x] Auto Claim Daily Bonus
