@@ -5,7 +5,7 @@ Auto Claim for Major Telegram Bot
 
 # Watch Video Tutorial 
 <object width="425" height="350">
-  <param name="movie" value="http://www.youtube.com/user/wwwLoveWatercom?v=BTRN1YETpyg" />
+  <param name="movie" value="https://youtu.be/6ZPwzPVNArU" />
   <param name="wmode" value="transparent" />
   <embed src="http://www.youtube.com/user/wwwLoveWatercom?v=BTRN1YETpyg"
          type="application/x-shockwave-flash"
