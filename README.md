@@ -9,6 +9,7 @@ Auto Claim for Major Telegram Bot
 
 - [x] Auto Claim Daily Bonus
 - [x] Auto Claim Daily Spin Reward
+- [x] Proxy Supported
 - [x] Multi Account Support
 
 # Register
