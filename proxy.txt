@@ -1,0 +1,2 @@
+Proxy formate 
+[user:pass@ip:port]
