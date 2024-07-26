@@ -41,10 +41,11 @@ Click the following url to register : [Major Bot](https://t.me/major/start?start
    ```
    python -m pip install -r pip.txt
    ```
+5. Add proxy on `proxy.txt` file Proxy Formate `[user:pass@ip:port]`
 
-5. Edit `data.txt`, input you auth token in `data.txt` file
+6. Edit `data.txt`, input you auth token in `data.txt` file
 
-6. execute the main program 
+7. execute the main program 
    ```
    python Major.py
    ```
@@ -82,7 +83,9 @@ Click the following url to register : [Major Bot](https://t.me/major/start?start
 
 5. Edit `data.txt`, input you auth token in `data.txt` file
 
-6. execute the main program 
+6. Add proxy on `proxy.txt` file Proxy Formate `[user:pass@ip:port]`
+
+7. execute the main program 
    ```
    python Major.py
    ```
@@ -118,7 +121,9 @@ Click the following url to register : [Major Bot](https://t.me/major/start?start
 
 5. Edit `data.txt`, input you auth token in `data.txt` file
 
-6. execute the main program 
+6. Add proxy on `proxy.txt` file Proxy Formate `[user:pass@ip:port]`
+
+7. execute the main program 
    ```
    python Major.py
    ```
