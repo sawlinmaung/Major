@@ -63,17 +63,47 @@ def login(query_id, proxies=None):
         "Referer": "https://major.glados.app/"
     }
     response = requests.post(url_login, headers=headers, data=json.dumps(payload), proxies=proxies)
+    response_json = response.json()
     if response.status_code == 200:
-        return response.json()
+        return response_json
     else:
         print(f"Login failed with status code: {response.status_code}")
         return None
 
 def get_user_rating(data):
-    return data.get('user', {}).get('rating')
+    return data.get('user', {}).get('id')
 
 def get_access_token(data):
     return data.get('access_token')
+
+import requests
+
+def check_user_details(user_id, access_token, proxies=None):
+    url_user_details = f"https://major.glados.app/api/users/{user_id}/"
+    headers_user_details = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Referer": "https://major.glados.app/"
+    }
+    
+    try:
+        response = requests.get(url_user_details, headers=headers_user_details, proxies=proxies)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+        
+        data = response.json()
+        rating = data.get("rating", "No rating found")
+        print(f"{Fore.GREEN + Style.BRIGHT}Balance: {rating}")
+        return rating
+    
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+    except Exception as err:
+        print(f"Other error occurred: {err}")
+
+    return None
+
 
 def perform_daily_spin(access_token, proxies=None):
     url_spin = "https://major.glados.app/api/roulette"
@@ -85,6 +115,20 @@ def perform_daily_spin(access_token, proxies=None):
         "Referer": "https://major.glados.app/"
     }
     response = requests.post(url_spin, headers=headers_spin, proxies=proxies)
+    return response
+
+def daily_hold(access_token, proxies=None):
+    coins = random.randint(900, 950)
+    payload = {"coins": coins} 
+    url_spin = "https://major.glados.app/api/bonuses/coins/"
+    headers_spin = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Referer": "https://major.glados.app/"
+    }
+    response = requests.post(url_spin, data=json.dumps(payload), headers=headers_spin, proxies=proxies)
     return response
 
 def perform_daily(access_token, proxies=None):
@@ -152,7 +196,7 @@ def check_proxy(proxy):
             print(f"{Fore.GREEN + Style.BRIGHT}Proxy is Live: {proxy[:3]}.....{proxy[-3:]}")
             return proxy_dict
     except:
-        print(f"{Fore.RED + Style.BRIGHT}Proxy is Dead: {proxy}")
+        pass
     return None    
 
 def get_working_proxy(proxies):
@@ -202,25 +246,28 @@ def main():
                 continue
 
             access_token = get_access_token(login_data)
-            rating = get_user_rating(login_data)
-
-            if rating is None:
-                print(f"{Fore.RED + Style.BRIGHT}Failed to retrieve rating for account {index}.")
-                continue
-
-            print(f"{Fore.YELLOW + Style.BRIGHT}Balance: {rating}")
+            check_user_details(user_id, access_token, proxies=proxy_dict)
 
             if access_token:
                 response_spin = perform_daily_spin(access_token, proxies=proxy_dict)
                 if response_spin.status_code == 201:
                     spin_data = response_spin.json()
                     rating_award = spin_data.get("rating_award")
-                    user_rating_after = spin_data.get("user_rating_after")
                     print(f"{Fore.GREEN + Style.BRIGHT}Claim Successful")
                     print(f"{Fore.MAGENTA + Style.BRIGHT}Daily Spin Reward: {rating_award}")
-                    print(f"{Fore.CYAN + Style.BRIGHT}New Balance: {user_rating_after}")
                 elif response_spin.status_code == 400:
                     print(f"{Fore.RED + Style.BRIGHT}Daily Spin Already Claimed")
+                    
+                response_hold = daily_hold(access_token, proxies=proxy_dict)
+                if response_hold.status_code == 201:
+                    print(f"{Fore.GREEN + Style.BRIGHT}Daily Hold Balance Claimed Successful")
+                 
+                elif response_hold.status_code == 400:
+                    print(f"{Fore.RED + Style.BRIGHT}Daily Hold Balance Already Claimed")
+                    
+                else:
+                  print(f"Status Code: {response_hold.status_code}")
+                  print(f"Response: {response_hold}")
 
                 response_daily = perform_daily(access_token, proxies=proxy_dict)
                 if response_daily.status_code == 200:
@@ -242,6 +289,7 @@ def main():
                             print(f"{Fore.GREEN + Style.BRIGHT}Squad Joined Successfully")
                         else:
                             print(f"{Fore.RED + Style.BRIGHT}Failed to join squad.")
+            
             else:
                 print(f"{Fore.RED + Style.BRIGHT}Access token not found in login response for account {index}.")
 
