@@ -295,7 +295,7 @@ def main():
 
             print()  # Print a newline for better readability
         
-        countdown_timer(12 * 60 * 60)  # 12 hours in seconds
+        countdown_timer(1 * 60 * 60)
         clear_terminal()
         art()  # Refresh the banner
 
