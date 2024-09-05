@@ -286,7 +286,6 @@ def main():
                   print(f"Response: {response_hold}")
                   
                 response_swipe = daily_swipe(access_token, proxies=proxy_dict)
-                print(response_swipe.json())
                 if response_swipe.status_code == 201:
                     print(f"{Fore.GREEN + Style.BRIGHT}Daily Swipe Balance Claimed Successful")
                  
