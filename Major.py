@@ -132,7 +132,7 @@ def daily_hold(access_token, proxies=None):
     return response
 
 def daily_swipe(access_token, proxies=None):
-    coins = random.randint(9000, 10000)
+    coins = random.randint(1000, 1300)
     payload = {"coins": coins} 
     url_spin = "https://major.glados.app/api/swipe_coin/"
     headers_spin = {
@@ -285,11 +285,12 @@ def main():
                   print(f"Status Code: {response_hold.status_code}")
                   print(f"Response: {response_hold}")
                   
-                response_swipe = daily_hold(access_token, proxies=proxy_dict)
-                if response_hold.status_code == 201:
+                response_swipe = daily_swipe(access_token, proxies=proxy_dict)
+                print(response_swipe.json())
+                if response_swipe.status_code == 201:
                     print(f"{Fore.GREEN + Style.BRIGHT}Daily Swipe Balance Claimed Successful")
                  
-                elif response_hold.status_code == 400:
+                elif response_swipe.status_code == 400:
                     print(f"{Fore.RED + Style.BRIGHT}Daily Swipe Balance Already Claimed")
                     
                 else:
