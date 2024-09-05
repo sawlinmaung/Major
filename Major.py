@@ -106,7 +106,7 @@ def check_user_details(user_id, access_token, proxies=None):
 
 
 def perform_daily_spin(access_token, proxies=None):
-    url_spin = "https://major.glados.app/api/roulette"
+    url_spin = "https://major.glados.app/api/roulette/"
     headers_spin = {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -121,6 +121,20 @@ def daily_hold(access_token, proxies=None):
     coins = random.randint(900, 950)
     payload = {"coins": coins} 
     url_spin = "https://major.glados.app/api/bonuses/coins/"
+    headers_spin = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Referer": "https://major.glados.app/"
+    }
+    response = requests.post(url_spin, data=json.dumps(payload), headers=headers_spin, proxies=proxies)
+    return response
+
+def daily_swipe(access_token, proxies=None):
+    coins = random.randint(9000, 10000)
+    payload = {"coins": coins} 
+    url_spin = "https://major.glados.app/api/swipe_coin/"
     headers_spin = {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -257,6 +271,8 @@ def main():
                     print(f"{Fore.MAGENTA + Style.BRIGHT}Daily Spin Reward: {rating_award}")
                 elif response_spin.status_code == 400:
                     print(f"{Fore.RED + Style.BRIGHT}Daily Spin Already Claimed")
+                else:
+                    print(f"{Fore.RED + Style.BRIGHT}Daily Spin Already Claimed")
                     
                 response_hold = daily_hold(access_token, proxies=proxy_dict)
                 if response_hold.status_code == 201:
@@ -268,7 +284,18 @@ def main():
                 else:
                   print(f"Status Code: {response_hold.status_code}")
                   print(f"Response: {response_hold}")
-
+                  
+                response_swipe = daily_hold(access_token, proxies=proxy_dict)
+                if response_hold.status_code == 201:
+                    print(f"{Fore.GREEN + Style.BRIGHT}Daily Swipe Balance Claimed Successful")
+                 
+                elif response_hold.status_code == 400:
+                    print(f"{Fore.RED + Style.BRIGHT}Daily Swipe Balance Already Claimed")
+                    
+                else:
+                  print(f"Status Code: {response_swipe.status_code}")
+                  print(f"Response: {response_swipe}")
+                
                 response_daily = perform_daily(access_token, proxies=proxy_dict)
                 if response_daily.status_code == 200:
                     daily_data = response_daily.json()
