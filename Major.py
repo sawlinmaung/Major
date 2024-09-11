@@ -145,6 +145,20 @@ def daily_swipe(access_token, proxies=None):
     response = requests.post(url_spin, data=json.dumps(payload), headers=headers_spin, proxies=proxies)
     return response
 
+def durov(access_token, proxies=None, c_1=None, c_2=None, c_3=None, c_4=None):
+    url_durov = "https://major.bot/api/durov/"
+    headers_durov = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Referer": "https://major.glados.app/"
+    }
+    
+    payload = {"choice_1": c_1, "choice_2": c_2, "choice_3": c_3, "choice_4": c_4}
+    response = requests.post(url_durov, data=json.dumps(payload), headers=headers_durov, proxies=proxies)
+    return response
+
 def perform_daily(access_token, proxies=None):
     url_daily = "https://major.glados.app/api/user-visits/visit/"
     headers_daily = {
@@ -238,6 +252,21 @@ def main():
     else:
         proxies = None
 
+    play_durov = input("Do you play Durov? (y/n): ").strip().lower()
+    durov_enabled = False
+    if play_durov == 'y':
+        durov_enabled = True
+
+    if durov_enabled:
+        durov_input = input("Input Durov choices (e.g: 4, 6, 9, 10): ").strip()
+        choices = durov_input.split(',')
+        # Ensure that exactly 4 choices are provided
+        if len(choices) == 4:
+            c_1, c_2, c_3, c_4 = [choice.strip() for choice in choices]
+        else:
+            print(f"{Fore.RED + Style.BRIGHT}Invalid input. Please provide exactly 4 comma-separated choices.")
+            return
+
     while True:
         for index, query_id in enumerate(query_ids, start=1):
             print(f"{Fore.CYAN + Style.BRIGHT}------Account No.{index}------")
@@ -319,6 +348,15 @@ def main():
             
             else:
                 print(f"{Fore.RED + Style.BRIGHT}Access token not found in login response for account {index}.")
+
+            # Durov functionality
+            if durov_enabled:
+                response_durov = durov(access_token, proxies=proxy_dict, c_1=c_1, c_2=c_2, c_3=c_3, c_4=c_4)
+                if response_durov.status_code == 201:
+                    durov_data = response_durov.json()
+                    print(f"{Fore.GREEN + Style.BRIGHT}Daily Durov Claimed Successful")
+                else:
+                    print(f"{Fore.RED + Style.BRIGHT}Daily Durov Already Claimed")
 
             print()  # Print a newline for better readability
         
