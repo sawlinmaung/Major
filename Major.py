@@ -242,7 +242,7 @@ def main():
     query_ids = read_query_ids('data.txt')
     clear_terminal()
     art()
-    
+
     use_proxy = input("Do you want to use proxy? (y/n): ").strip().lower()
     if use_proxy == 'y':
         proxies = read_proxies('proxy.txt')
@@ -254,13 +254,13 @@ def main():
 
     play_durov = input("Do you play Durov? (y/n): ").strip().lower()
     durov_enabled = False
+    durov_called = False
     if play_durov == 'y':
         durov_enabled = True
 
     if durov_enabled:
         durov_input = input("Input Durov choices (e.g: 4, 6, 9, 10): ").strip()
         choices = durov_input.split(',')
-        # Ensure that exactly 4 choices are provided
         if len(choices) == 4:
             c_1, c_2, c_3, c_4 = [choice.strip() for choice in choices]
         else:
@@ -350,17 +350,18 @@ def main():
                 print(f"{Fore.RED + Style.BRIGHT}Access token not found in login response for account {index}.")
 
             # Durov functionality
-            if durov_enabled:
+            if durov_enabled and not durov_called:
                 response_durov = durov(access_token, proxies=proxy_dict, c_1=c_1, c_2=c_2, c_3=c_3, c_4=c_4)
                 if response_durov.status_code == 201:
                     durov_data = response_durov.json()
                     print(f"{Fore.GREEN + Style.BRIGHT}Daily Durov Claimed Successful")
                 else:
                     print(f"{Fore.RED + Style.BRIGHT}Daily Durov Already Claimed")
+                durov_called = True  # Set the flag to True after calling durov
 
             print()  # Print a newline for better readability
         
-        countdown_timer(1 * 60 * 60)
+        countdown_timer(1 * 1 * 5)
         clear_terminal()
         art()  # Refresh the banner
 
