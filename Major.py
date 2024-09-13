@@ -254,7 +254,6 @@ def main():
 
     play_durov = input("Do you play Durov? (y/n): ").strip().lower()
     durov_enabled = False
-    durov_called = False
     if play_durov == 'y':
         durov_enabled = True
 
@@ -267,6 +266,8 @@ def main():
             print(f"{Fore.RED + Style.BRIGHT}Invalid input. Please provide exactly 4 comma-separated choices.")
             return
 
+    durov_called = False  
+    first_cycle = True
     while True:
         for index, query_id in enumerate(query_ids, start=1):
             print(f"{Fore.CYAN + Style.BRIGHT}------Account No.{index}------")
@@ -349,21 +350,24 @@ def main():
             else:
                 print(f"{Fore.RED + Style.BRIGHT}Access token not found in login response for account {index}.")
 
-            # Durov functionality
-            if durov_enabled and not durov_called:
+            if durov_enabled and first_cycle:
                 response_durov = durov(access_token, proxies=proxy_dict, c_1=c_1, c_2=c_2, c_3=c_3, c_4=c_4)
                 if response_durov.status_code == 201:
-                    durov_data = response_durov.json()
                     print(f"{Fore.GREEN + Style.BRIGHT}Daily Durov Claimed Successful")
+                    durov_called = True
                 else:
                     print(f"{Fore.RED + Style.BRIGHT}Daily Durov Already Claimed")
-                durov_called = True  # Set the flag to True after calling durov
 
-            print()  # Print a newline for better readability
+            print()
         
-        countdown_timer(1 * 1 * 5)
+        first_cycle = False
+
+        if durov_called:
+            print(f"{Fore.YELLOW}All Accounts Durov Claimed. Skip Durov 😁")
+        
+        countdown_timer(1 * 60 * 60)
         clear_terminal()
-        art()  # Refresh the banner
+        art()
 
 if __name__ == "__main__":
     main()
