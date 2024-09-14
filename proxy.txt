@@ -1,2 +1,1 @@
-Proxy formate 
-[user:pass@ip:port]
+I_got_it_from_my_daddy:550507@202.165.80.43:80
